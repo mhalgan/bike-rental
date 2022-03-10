@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const cors = require("cors");
 const helmet = require("helmet");
 const errorHandler = require("./middleware/errorHandler");
 const routes = require("./routes");
@@ -9,6 +10,7 @@ const logger = require("./config/winston");
 
 const app = express();
 
+app.use(cors());
 app.use(helmet());
 app.use(express.json());
 

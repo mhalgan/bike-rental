@@ -16,16 +16,15 @@ const register = async (req, res, next) => {
 
   try {
     //Register user
-    const { id, firstName, lastName, email, createdAt, updatedAt } =
-      await User.create({
-        firstName,
-        lastName,
-        email,
-        password,
-        role: "User",
-      });
+    const user = await User.create({
+      firstName,
+      lastName,
+      email,
+      password,
+      role: "User",
+    });
 
-    res.json({ id, firstName, lastName, email, createdAt, updatedAt });
+    res.json(user);
   } catch (error) {
     return next(error);
   }
