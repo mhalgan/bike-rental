@@ -1,13 +1,17 @@
 const logger = require("../config/winston");
 const { getReasonPhrase } = require("http-status-codes");
+const { StatusCodes } = require("http-status-codes");
 
 const errorHandler = (err, req, res, next) => {
   let logError;
 
+  if (res.statusCode >= 200 && res.statusCode <= 299) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+  }
+
   const { url, method, params, query, headers, body } = req;
   const { statusCode } = res;
 
-  // Filter relevant request fields
   if (err) {
     logError = {
       url,

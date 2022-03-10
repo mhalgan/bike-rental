@@ -1,46 +1,51 @@
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { StatusCodes } = require("http-status-codes");
 
 const User = require("../models/User");
 
 const register = async (req, res, next) => {
+  const { firstName, lastName, email, password } = req.body;
+
   //Check if user Exist
-  const userExists = await User.findOne({ email: req?.body?.email });
+  const userExists = await User.findOne({ email });
 
   if (userExists) {
     res.status(StatusCodes.CONFLICT);
     return next("User already exists");
   }
 
-  const { firstName, lastName, email, password } = req.body;
   try {
     //Register user
-    const user = await User.create({
-      firstName,
-      lastName,
-      email,
-      password,
-      role: "User",
-    });
-    res.json(user);
+    const { id, firstName, lastName, email, createdAt, updatedAt } =
+      await User.create({
+        firstName,
+        lastName,
+        email,
+        password,
+        role: "User",
+      });
+
+    res.json({ id, firstName, lastName, email, createdAt, updatedAt });
   } catch (error) {
     return next(error);
   }
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   const { email, password } = req.body;
   //check if user exists
-  const userFound = await User.findOne({ email });
-  if (userFound && (await userFound.isPasswordMatched(password))) {
+  const userFound = await User.findOne({ email }).select("+password");
+  if (userFound && (await userFound.verifyPassword(password))) {
+    const { id, firstName, lastName, email, role } = userFound;
+
     res.json({
-      _id: userFound?._id,
-      firstName: userFound?.firstName,
-      lastName: userFound?.lastName,
-      email: userFound?.email,
-      role: userFound?.role,
-      token: generateToken(userFound?._id),
+      id,
+      firstName,
+      lastName,
+      email,
+      token: jwt.sign({ id, role }, process.env.JWT_PRIVATE_KEY, {
+        expiresIn: "20d",
+      }),
     });
   } else {
     res.status(401);

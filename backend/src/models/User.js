@@ -16,9 +16,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Email is required"],
     },
+    // Password will be only be returned when specifically asked
     password: {
       type: String,
       required: [true, "Password is required"],
+      select: false,
     },
     role: {
       type: String,
@@ -47,7 +49,7 @@ userSchema.pre("save", async function (next) {
 });
 
 //match password
-userSchema.methods.isPasswordMatched = async function (enteredPassword) {
+userSchema.methods.verifyPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
