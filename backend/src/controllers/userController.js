@@ -6,7 +6,7 @@ const User = require("../models/User");
 const register = async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
 
-  //Check if user Exist
+  // Check if user Exist
   const userExists = await User.findOne({ email });
 
   if (userExists) {
@@ -15,7 +15,7 @@ const register = async (req, res, next) => {
   }
 
   try {
-    //Register user
+    // Register user
     const user = await User.create({
       firstName,
       lastName,
@@ -32,7 +32,7 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
-  //check if user exists
+
   const userFound = await User.findOne({ email }).select("+password");
   if (userFound && (await userFound.verifyPassword(password))) {
     const { id, firstName, lastName, email, role } = userFound;
@@ -42,6 +42,7 @@ const login = async (req, res, next) => {
       firstName,
       lastName,
       email,
+      role,
       token: jwt.sign({ id, role }, process.env.JWT_PRIVATE_KEY, {
         expiresIn: "20d",
       }),

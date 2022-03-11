@@ -8,19 +8,27 @@ export const usersApi = createApi({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: ({ email, password }) => ({
-        url: `/login`,
+        url: "/login",
         method: "POST",
         body: { email, password },
       }),
     }),
+
     register: builder.mutation({
       query: ({ firstName, lastName, email, password }) => ({
-        url: `/register`,
+        url: "/register",
         method: "POST",
         body: { firstName, lastName, email, password },
+      }),
+    }),
+
+    fetchAllUsers: builder.query({
+      query: () => ({
+        url: "/",
       }),
     }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = usersApi;
+export const { useLoginMutation, useRegisterMutation, useFetchAllUsersQuery } =
+  usersApi;

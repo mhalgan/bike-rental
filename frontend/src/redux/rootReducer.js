@@ -1,9 +1,15 @@
+import { combineReducers } from "@reduxjs/toolkit";
+import { reducer as authSlice } from "./auth/authSlice";
+import { reducer as usersReducer } from "./users/usersSlice";
+
 import { usersApi } from "../services/usersService";
+import { bikesApi } from "../services/bikesService";
 
-const rootReducer = {
+const rootReducer = combineReducers({
+  auth: authSlice,
+  users: usersReducer,
   [usersApi.reducerPath]: usersApi.reducer,
-};
-
-export const apisMiddleware = [usersApi.middleware];
+  [bikesApi.reducerPath]: bikesApi.reducer,
+});
 
 export default rootReducer;

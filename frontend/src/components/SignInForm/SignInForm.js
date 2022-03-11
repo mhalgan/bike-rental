@@ -2,38 +2,33 @@ import React, { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 
 import { useSnackBar } from "../../hooks";
 import { useLoginMutation } from "../../services/usersService";
 import errorMessages from "../../utils/errorMessages";
 
 const SignInForm = () => {
-  const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const [login, { isLoading, isSuccess, error: apiError }] = useLoginMutation();
+  const [login, { isLoading, error: apiError }] = useLoginMutation();
 
   const [Snackbar, showSnackbar] = useSnackBar({
     message: errorMessages.invalidCredentials,
     severity: "error",
   });
 
-  const onSubmit = (data) => {
-    login(data);
+  const onSubmit = (form) => {
+    login(form);
   };
 
   useEffect(() => {
@@ -41,12 +36,6 @@ const SignInForm = () => {
       showSnackbar(true);
     }
   }, [apiError, showSnackbar]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      navigate("/", { replace: true });
-    }
-  }, [navigate, isSuccess]);
 
   return (
     <React.Fragment>
@@ -100,12 +89,6 @@ const SignInForm = () => {
             error={!!errors["password"]}
             helperText={errors["password"]?.message}
             disabled={isLoading}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox value="remember" color="primary" disabled={isLoading} />
-            }
-            label="Remember me"
           />
           <Button
             type="submit"
