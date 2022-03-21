@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 
 import { useSnackBar } from "../../hooks";
 import { useLoginMutation } from "../../services/usersService";
-import errorMessages from "../../utils/errorMessages";
+import { errorMessages } from "../../utils";
 
 const SignInForm = () => {
   const {

@@ -22,7 +22,27 @@ export const bikesApi = createApi({
         url: "/",
       }),
     }),
+
+    createBike: builder.mutation({
+      query: ({ model, color, location }) => ({
+        url: "/",
+        method: "POST",
+        body: { model, color, location },
+      }),
+    }),
+
+    deleteBike: builder.mutation({
+      query: (id) => ({
+        url: `/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
-export const { useFetchAllBikesQuery } = bikesApi;
+export const {
+  useFetchAllBikesQuery,
+  useLazyFetchAllBikesQuery,
+  useCreateBikeMutation,
+  useDeleteBikeMutation,
+} = bikesApi;

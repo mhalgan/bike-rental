@@ -1,5 +1,14 @@
 const mongoose = require("mongoose");
 
+const locationSchema = mongoose.Schema({
+  city: {
+    type: String,
+  },
+  state: {
+    type: String,
+  },
+});
+
 const bikeSchema = new mongoose.Schema(
   {
     model: {
@@ -10,14 +19,13 @@ const bikeSchema = new mongoose.Schema(
       type: String,
     },
     location: {
-      type: {
+      city: {
         type: String,
-        enum: ["Point"],
-        required: true,
+        required: [true, "City is required"],
       },
-      coordinates: {
-        type: [Number],
-        required: true,
+      state: {
+        type: String,
+        required: [true, "State is required"],
       },
     },
     rating: {

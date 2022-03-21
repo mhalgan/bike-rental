@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useSnackBar } from "../../hooks";
 import { useRegisterMutation } from "../../services/usersService";
-import errorMessages from "../../utils/errorMessages";
+import { errorMessages } from "../../utils";
 
 const SignUpForm = () => {
   const navigate = useNavigate();
@@ -156,6 +156,7 @@ const SignUpForm = () => {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={isLoading}
           >
             Sign Up
           </Button>
